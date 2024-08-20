@@ -2,14 +2,12 @@
 require("dotenv").config();
 const ClientsUser = require("../model/clients");
 
-
 const ClientController = async (req, res) => {
   try {
+    console.log(req.body);
     const { companyName, logoImage } = req.body;
 
-
-
-    const newUser = new ClientsUser({companyName, logoImage});
+    const newUser = new ClientsUser({ companyName, logoImage });
     await newUser.save();
 
     return res.status(201).send({
@@ -43,30 +41,34 @@ const ClientgetController = async (req, res) => {
   }
 };
 const ClientDeleteController = async (req, res) => {
-    try {
-      const { id } = req.params;
-      console.log(id);
-      const deletedClient = await ClientsUser.findByIdAndDelete(id);
-  
-      if (!deletedClient) {
-        return res.status(404).send({
-          message: "Client logo not found",
-          success: false,
-        });
-      }
-  
-      return res.status(200).send({
-        message: "Client logo deleted successfully",
-        data: deletedClient,
-        success: true,
-      });
-    } catch (err) {
-      console.error(err);
-      return res.status(500).send({
-        message: "Error deleting client logo",
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const deletedClient = await ClientsUser.findByIdAndDelete(id);
+
+    if (!deletedClient) {
+      return res.status(404).send({
+        message: "Client logo not found",
         success: false,
       });
     }
-  };
 
-module.exports = { ClientController, ClientgetController,ClientDeleteController };
+    return res.status(200).send({
+      message: "Client logo deleted successfully",
+      data: deletedClient,
+      success: true,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({
+      message: "Error deleting client logo",
+      success: false,
+    });
+  }
+};
+
+module.exports = {
+  ClientController,
+  ClientgetController,
+  ClientDeleteController,
+};

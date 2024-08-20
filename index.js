@@ -24,13 +24,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("hello world");
 });
 
+// Register routes
 app.use("/api", imageRouter);
 app.use("/api/contact", ContactRouter);
 app.use("/api/resume", ResumeRouter);
@@ -38,7 +38,6 @@ app.use("/api/gettouch", GetTouchRouter);
 app.use("/api/experince", ExperienceRouter);
 app.use("/api/clients", ClientRouter);
 app.use("/api/testimonial", TestimonialRouter);
-app.use("/api/technology", TechnologyRouter);
 app.use("/api/technology", TechnologyRouter);
 app.use("/api/blogs", BlogRouter);
 app.use("/api/comment", CommentRouter);
@@ -53,7 +52,7 @@ const server = app.listen(PORT, (err) => {
   }
 });
 
-// Handle server start error
+// Handle server start errors
 server.on("error", (err) => {
   if (err.code === "EADDRINUSE") {
     console.error(`Port ${PORT} is already in use`);

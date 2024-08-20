@@ -6,13 +6,10 @@ const commentController = async (req, res) => {
     try {
         const { name, comment, blog } = req.body;
 
-        // Create a new Comment instance
         const newComment = new Comment({ name, comment, blog });
 
-        // Validate the comment
         await newComment.validate();
 
-        // Save the comment to the database
         await newComment.save();
 
         return res.status(201).send({
