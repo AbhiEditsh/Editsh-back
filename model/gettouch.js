@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const getTouchSchema = new mongoose.Schema({
-  name: {
+  fullName: {
     type: String,
     required: true,
   },
@@ -13,13 +13,16 @@ const getTouchSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  service: {
+  projectDescription: {
     type: String,
     required: true,
   },
-  message: {
+  budget: {
     type: String,
     required: true,
+  },
+  resumeImage: {
+    type: String,
   },
 });
 

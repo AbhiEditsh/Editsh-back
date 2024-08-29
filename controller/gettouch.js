@@ -4,9 +4,15 @@ const GetTouchUser = require("../model/gettouch");
 
 const GetTouchController = async (req, res) => {
   try {
-    const { name, email, mobile, service, message } = req.body;
+    const {
+      fullName,
+      email,
+      mobile,
+      projectDescription,
+      budget,
+      resumeImage,
+    } = req.body;
 
-    // Check if the user already exists
     const existingUser = await GetTouchUser.findOne({ email });
     if (existingUser) {
       return res.status(400).send({
@@ -15,11 +21,16 @@ const GetTouchController = async (req, res) => {
       });
     }
 
-    // Save the new user
-    const newUser = new GetTouchUser({ name, email, mobile, service, message });
+    const newUser = new GetTouchUser({
+      fullName,
+      email,
+      mobile,
+      projectDescription,
+      budget,
+      resumeImage,
+    });
     await newUser.save();
 
-    // Set up NodeMailer transport
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -28,26 +39,27 @@ const GetTouchController = async (req, res) => {
       },
     });
 
-    // Set up email options
     const mailOptions = {
       from: email,
       to: "editshtech@gmail.com",
-      subject: "Thank you for getting in touch!",
-      text: `Dear ${name},
+      subject: "New Contact Form Submission",
+      text: `Dear Team,
 
-Thank you for reaching out to us. We have received your message and will get back to you shortly.
+A new contact form has been submitted. Here are the details:
 
-Here are the details you provided:
-Name: ${name}
+Full Name: ${fullName}
 Email: ${email}
 Mobile: ${mobile}
-Service: ${service}
-Message: ${message}
+Project Description: ${projectDescription}
+Budget: ${budget}
+Resume Image URL: ${resumeImage ? resumeImage : "No resume image uploaded"}
 
 Best regards,
-Editsh`,
+Your Application`,
     };
+
     await transporter.sendMail(mailOptions);
+
     return res.status(201).send({
       message: "Contact sent successfully and email notification sent",
       data: {
