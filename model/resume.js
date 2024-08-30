@@ -22,6 +22,10 @@ const resumeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  applyForPosition:{
+    type:String,
+    required:true,
+  },
   currentCompanyName:{
     type:String,
     required:true

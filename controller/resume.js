@@ -1,4 +1,3 @@
-require("dotenv").config();
 const Resume = require("../model/resume");
 
 const ResumeController = async (req, res) => {
@@ -9,6 +8,7 @@ const ResumeController = async (req, res) => {
       email,
       mobile,
       address,
+      applyForPosition,
       currentCompanyName,
       year,
       month,
@@ -16,7 +16,7 @@ const ResumeController = async (req, res) => {
       expectedSalary,
       resumeImage,
     } = req.body;
-
+    console.log(req.body);
     const existingUser = await Resume.findOne({ email });
     if (existingUser) {
       return res.status(400).send({
@@ -31,6 +31,7 @@ const ResumeController = async (req, res) => {
       email,
       mobile,
       address,
+      applyForPosition,
       currentCompanyName,
       year,
       month,

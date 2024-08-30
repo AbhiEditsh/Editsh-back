@@ -18,20 +18,20 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|pdf|webp|doc|docx|svg/; // Added webp and svg
+    const allowedTypes = /jpeg|jpg|png|pdf|webp|doc/;
     const extname = allowedTypes.test(file.mimetype.toLowerCase());
 
     if (extname) {
       cb(null, true);
     } else {
-      cb(new Error("Only .png, .jpg, .jpeg, .pdf, .doc, .docx, .webp, and .svg formats are allowed!"));
+      cb(new Error("Only .png, .jpg, .jpeg, and .pdf formats are allowed!"));
     }
   },
-  limits: { fileSize: 1024 * 1024 * 10 }, // 10MB limit
+  limits: { fileSize: 1024 * 1024 * 5 }, // 5MB limit
 });
 
-// Upload PDF/DOC/WEBP/SVG to Cloudinary
-Router.post("/upload-document", upload.single("document"), async (req, res) => {
+// Upload image to Cloudinary
+Router.post("/upload-image", upload.single("image"), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
@@ -41,18 +41,17 @@ Router.post("/upload-document", upload.single("document"), async (req, res) => {
       {
         folder: "uploads",
         public_id: Date.now() + "-" + req.file.originalname,
-        resource_type: "raw", // Use 'raw' for non-image files like PDFs and DOCs
       },
       (error, result) => {
         if (error) {
           return res
             .status(500)
-            .json({ message: "Error uploading document to Cloudinary", error });
+            .json({ message: "Error uploading image to Cloudinary", error });
         }
         res.status(200).json({
           url: result.secure_url,
           public_id: result.public_id,
-          message: "Document uploaded successfully",
+          message: "Image uploaded successfully",
         });
       }
     );
@@ -62,7 +61,7 @@ Router.post("/upload-document", upload.single("document"), async (req, res) => {
     bufferStream.push(null);
     bufferStream.pipe(uploadStream);
   } catch (error) {
-    res.status(500).json({ message: "Error uploading document", error });
+    res.status(500).json({ message: "Error uploading image", error });
   }
 });
 
