@@ -21,7 +21,7 @@ const getTouchSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  resumeImage: {
+  document: {
     type: String,
   },
 });

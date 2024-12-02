@@ -4,7 +4,7 @@ const GetTouchUser = require("../model/gettouch");
 
 const GetTouchController = async (req, res) => {
   try {
-    const { fullName, email, mobile, projectDescription, budget, resumeImage } =
+    const { fullName, email, mobile, projectDescription, budget, document } =
       req.body;
 
     const existingUser = await GetTouchUser.findOne({ email });
@@ -21,7 +21,7 @@ const GetTouchController = async (req, res) => {
       mobile,
       projectDescription,
       budget,
-      resumeImage,
+      document,
     });
     await newUser.save();
 
@@ -46,7 +46,7 @@ Email: ${email}
 Mobile: ${mobile}
 Project Description: ${projectDescription}
 Budget: ${budget}
-Resume Image URL: ${resumeImage ? resumeImage : "No resume image uploaded"}
+Resume Image URL: ${document ? document : "No resume image uploaded"}
 
 Best regards,
 Your Application`,
@@ -87,3 +87,5 @@ const GetTouchgetController = async (req, res) => {
 };
 
 module.exports = { GetTouchController, GetTouchgetController };
+
+
