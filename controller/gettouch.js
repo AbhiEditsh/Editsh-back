@@ -4,14 +4,8 @@ const GetTouchUser = require("../model/gettouch");
 
 const GetTouchController = async (req, res) => {
   try {
-    const {
-      fullName,
-      email,
-      mobile,
-      projectDescription,
-      budget,
-      resumeImage,
-    } = req.body;
+    const { fullName, email, mobile, projectDescription, budget, resumeImage } =
+      req.body;
 
     const existingUser = await GetTouchUser.findOne({ email });
     if (existingUser) {
@@ -59,9 +53,8 @@ Your Application`,
     };
 
     await transporter.sendMail(mailOptions);
-
     return res.status(201).send({
-      message: "Contact sent successfully and email notification sent",
+      message: "Contact sent successfully",
       data: {
         user: newUser,
       },
