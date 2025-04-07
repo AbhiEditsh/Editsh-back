@@ -24,13 +24,29 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+const allowedOrigins = [
+  "https://editsh.com",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
 const corsOptions = {
-  origin:"https://editsh.com",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  origin: function (origin, callback) {
+    // Allow Postman or direct curl calls
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 204,
 };
+
 app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
